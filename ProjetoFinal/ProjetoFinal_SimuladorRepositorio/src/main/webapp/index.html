@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciador de Repositórios</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button + button {
+            margin-left: 10px;
+        }
+        #resultado {
+            margin-top: 20px;
+            white-space: pre-wrap;
+            background: #f8f8f8;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gerenciador de Repositórios</h1>
+        <div class="form-group">
+            <label for="comando">Comando:</label>
+            <select id="comando">
+                <option value="registrar">Registrar</option>
+                <option value="logar">Logar</option>
+                <option value="criar">Criar Repositório</option>
+                <option value="acessar">Acessar Repositório</option>
+                <option value="modificar">Modificar Repositório</option>
+                <option value="liberar">Liberar Repositório</option>
+                <option value="deslogar">Deslogar</option>
+                <option value="listarRepos">Listar Repositórios</option>
+                <option value="listarUsuarios">Listar Usuários</option>
+                <option value="sair">Sair</option>
+            </select>
+        </div>
+        <div class="form-group" id="login-group">
+            <label for="login">Login:</label>
+            <input type="text" id="login">
+        </div>
+        <div class="form-group" id="senha-group">
+            <label for="senha">Senha:</label>
+            <input type="password" id="senha">
+        </div>
+        <div class="form-group" id="nome-group">
+            <label for="nome">Nome do Repositório:</label>
+            <input type="text" id="nome">
+        </div>
+        <div class="form-group" id="conteudo-group">
+            <label for="conteudo">Conteúdo:</label>
+            <input type="text" id="conteudo">
+        </div>
+        <button type="button" onclick="executarComando()">Executar</button>
+        <div id="resultado"></div>
+    </div>
+
+    <script>
+        function executarComando() {
+            var comando = document.getElementById('comando').value;
+            var login = document.getElementById('login').value;
+            var senha = document.getElementById('senha').value;
+            var nome = document.getElementById('nome').value;
+            var conteudo = document.getElementById('conteudo').value;
+            var resultado = document.getElementById('resultado');
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "OperadorServlet", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    resultado.textContent = xhr.responseText;
+                }
+            };
+
+            var params = "comando=" + comando + 
+                         "&login=" + encodeURIComponent(login) + 
+                         "&senha=" + encodeURIComponent(senha) + 
+                         "&nome=" + encodeURIComponent(nome) + 
+                         "&conteudo=" + encodeURIComponent(conteudo);
+            xhr.send(params);
+        }
+
+        // Mostrar ou esconder campos com base no comando selecionado
+        document.getElementById('comando').addEventListener('change', function() {
+            var comando = document.getElementById('comando').value;
+            document.getElementById('login-group').style.display = (comando === 'registrar' || comando === 'logar') ? 'block' : 'none';
+            document.getElementById('senha-group').style.display = (comando === 'registrar' || comando === 'logar') ? 'block' : 'none';
+            document.getElementById('nome-group').style.display = (comando === 'criar' || comando === 'acessar' || comando === 'modificar' || comando === 'liberar') ? 'block' : 'none';
+            document.getElementById('conteudo-group').style.display = (comando === 'modificar') ? 'block' : 'none';
+        });
+
+        // Inicializar a visibilidade dos campos
+        document.getElementById('comando').dispatchEvent(new Event('change'));
+    </script>
+</body>
+</html>

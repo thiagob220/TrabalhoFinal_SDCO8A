@@ -1,0 +1,23 @@
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
+         version="5.0">
+
+    <display-name>Gerenciador de Repositórios</display-name>
+
+    <!-- Configuração do Servlet -->
+    <servlet>
+        <servlet-name>OperadorServlet</servlet-name>
+        <servlet-class>br.OperadorServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>OperadorServlet</servlet-name>
+        <url-pattern>/OperadorServlet</url-pattern>
+    </servlet-mapping>
+
+    <!-- Configuração da Sessão -->
+    <session-config>
+        <session-timeout>30</session-timeout> <!-- Sessão expira em 30 minutos -->
+    </session-config>
+</web-app>
